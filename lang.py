@@ -72,6 +72,11 @@ def translate_to_english(text, source_language):
         print(f"Translation error: {e}")
         return None
 
+def change_language_prompt():
+    new_language = input("Enter the new language code: ")
+    print(f"Source language changed to {new_language}")
+    return new_language
+
 if __name__ == "__main__":
     car = Car()
 
@@ -79,18 +84,17 @@ if __name__ == "__main__":
     print(f"Source language set to {source_language}")
 
     while True:
-        user_input = input("Enter a few words (type 'exit' to end, 'change_lang' to change language): ")
+        user_input = input("Enter a few words (type 'exit' to end): ")
 
         if user_input.lower() == 'exit':
             print("Exiting the translation and control.")
             break
 
-        elif user_input.lower() == 'change_lang':
-            source_language = input("Enter the new language code: ")
-            print(f"Source language changed to {source_language}")
-            continue
-
         try:
+            if user_input.lower() == 'ganti bahasa' and source_language == 'id':
+                source_language = change_language_prompt()
+                continue
+
             translated_command = translate_to_english(user_input, source_language)
             print(f"Translated to English: {translated_command}")
             if not control_car(translated_command, car):
