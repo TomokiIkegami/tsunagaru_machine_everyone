@@ -65,7 +65,7 @@ def control_car(translated_command, car):
 
 def translate_to_english(text, source_language):
     try:
-        translator = Translator()
+        translator = Translator(service_urls=['translate.googleapis.com'])
         translated_text = translator.translate(text, src=source_language, dest='en').text
         return translated_text
     except Exception as e:
