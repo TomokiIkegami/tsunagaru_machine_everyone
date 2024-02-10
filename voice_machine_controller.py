@@ -10,7 +10,7 @@ import time    # 時間関連のライブラリ
 import threading    # マルチスレッド処理ライブラリ
 import sys   # システム関連のライブラリ
 
-ser = serial.Serial("COM5",115200) #Arduinoのシリアルポート番号と伝送速度を設定
+ser = serial.Serial("COM6",115200) #Arduinoのシリアルポート番号と伝送速度を設定
 
 def func_send():
     while True:
