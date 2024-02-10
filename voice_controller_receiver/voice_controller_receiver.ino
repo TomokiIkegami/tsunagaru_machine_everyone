@@ -141,7 +141,7 @@ void loop() {
     unsigned long currentTime = millis(); // 現在時刻を取得
     // lcd.setCursor(0,0);
 
-    /* 処理1：PCからの（制御）命令読み取りと送信 */
+    /* 1:Receive data from PC */
     if(currentTime-prevReadTime_ControlSignal>readPeriod_ControlSignal){
         prevReadTime_ControlSignal=currentTime; // 前時刻を現在の時刻に更新
         if(ESP_BT.available()>0){
@@ -150,7 +150,7 @@ void loop() {
         }
     }
     
-    /* 処理2:センサ出力値の読み取り（計測）と送信 */
+    /* 2:Send data to PC */
     if(currentTime-prevReadTime_Sensor1>samplingRate_Sensor1){
         prevReadTime_Sensor1=currentTime; // 前時刻を現在の時刻に更新
         val=analogRead(25); //センサの値などを読む
