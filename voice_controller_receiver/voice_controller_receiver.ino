@@ -141,7 +141,7 @@ void loop() {
     unsigned long currentTime = millis(); // 現在時刻を取得
     // lcd.setCursor(0,0);
 
-    /* 処理1：PCからの（制御）命令読み取りと送信 */
+    /* 1:Receive data from PC */
     if(currentTime-prevReadTime_ControlSignal>readPeriod_ControlSignal){
         prevReadTime_ControlSignal=currentTime; // 前時刻を現在の時刻に更新
         if(ESP_BT.available()>0){
@@ -150,7 +150,7 @@ void loop() {
         }
     }
     
-    /* 処理2:センサ出力値の読み取り（計測）と送信 */
+    /* 2:Send data to PC */
     if(currentTime-prevReadTime_Sensor1>samplingRate_Sensor1){
         prevReadTime_Sensor1=currentTime; // 前時刻を現在の時刻に更新
         val=analogRead(25); //センサの値などを読む
@@ -160,38 +160,38 @@ void loop() {
 
     curr = millis();  //現在時刻を取得
     /*命令に基づいてラジコンを制御*/
-    if (received_data_byte == "A") {
+    if (received_data_byte == "forward") {
       change_ST_pos(center_pos, mov_speed_ST);   // ステアを中心(Center)に
       change_TH_pos(forward_max, mov_speed_TH);  //前進(Forward)
-    } else if (received_data_byte == "B") {
+    } else if (received_data_byte == "backward") {
       change_ST_pos(center_pos, mov_speed_ST);    // ステアを中心(Center)に
       change_TH_pos(backward_max, mov_speed_TH);  //後退(Backward)
-    } else if (received_data_byte == "C") {
+    } else if (received_data_byte == "neutral") {
       forward_max = neutral_pos + forward_DR;     //標準の速度に設定
       change_ST_pos(center_pos, mov_speed_ST);    // ステアを中心(Center)に
       change_TH_pos(neutral_pos, mov_speed_brk);  //中立(Neutral)
-    } else if (received_data_byte == "D") {
+    } else if (received_data_byte == "left") {
       change_ST_pos(left_max, mov_speed_ST);      // ステアを左(Left)に切る
       change_TH_pos(neutral_pos, mov_speed_brk);  //中立(Neutral)
-    } else if (received_data_byte == "E") {
+    } else if (received_data_byte == "right") {
       change_ST_pos(right_max, mov_speed_ST);     // ステアを右(Right)に切る
       change_TH_pos(neutral_pos, mov_speed_brk);  //中立(Neutral)
-    } else if (received_data_byte == "F") {
+    } else if (received_data_byte == "left_and_forward") {
       change_ST_pos(left_max, mov_speed_ST);     // ステアを左(Left)に切る
       change_TH_pos(forward_max, mov_speed_TH);  //前進(Forward)
-    } else if (received_data_byte == "G") {
+    } else if (received_data_byte == "right_and_forward") {
       change_ST_pos(right_max, mov_speed_ST);    // ステアを右(Right)に切る
       change_TH_pos(forward_max, mov_speed_TH);  //前進(Forward)
-    } else if (received_data_byte == "H") {
+    } else if (received_data_byte == "left_and_backward") {
       change_ST_pos(left_max, mov_speed_ST);      // ステアを左(Left)に切る
       change_TH_pos(backward_max, mov_speed_TH);  //後退(Backward)
-    } else if (received_data_byte == "I") {
+    } else if (received_data_byte == "rigth_and_backward") {
       change_ST_pos(right_max, mov_speed_ST);     // ステアを右(Right)に切る
       change_TH_pos(backward_max, mov_speed_TH);  //後退(Backward)
-    } else if (received_data_byte == "J") {
+    } else if (received_data_byte == "accelerate") {
       forward_max = turbo_speed;                 //ターボの速度に設定
       change_TH_pos(forward_max, mov_speed_TH);  //前進(Forward)
-    } else if (received_data_byte == "K") {
+    } else if (received_data_byte == "deaccelerate") {
       forward_max = neutral_pos + forward_DR;    //標準の速度に設定
       change_TH_pos(forward_max, mov_speed_TH);  //前進(Forward)
     } else {

@@ -10,13 +10,15 @@ import time    # 時間関連のライブラリ
 import threading    # マルチスレッド処理ライブラリ
 import sys   # システム関連のライブラリ
 
-ser = serial.Serial("COM5",115200) #Arduinoのシリアルポート番号と伝送速度を設定
+import lang # 翻訳用プログラム
+
+ser = serial.Serial("COM6",115200) #Arduinoのシリアルポート番号と伝送速度を設定
 
 def func_send():
     while True:
         # キーボード入力によって、Arduinoに制御命令を送信
-        contorol_command=input("Enter the control command: ")
-        print("send1")
+        contorol_command=lang.translate_to_english(input("Enter a command: "), "ja")
+        print("Translated to: ",contorol_command)
         sent_command="{0};".format(contorol_command)
         byte_sent_command=sent_command.encode('utf-8')
         if(contorol_command=="q"):  # qを入力するとプログラムを終了
@@ -32,7 +34,7 @@ def func_read():
         # print("read")
         val_arduino=ser.readline()
         val_decoded=val_arduino.strip().decode("UTF-8")
-        print(val_decoded) #val_arduino:byte型なのでb'文字列'となって出てくる
+        # print(val_decoded) #val_arduino:byte型なのでb'文字列'となって出てくる
 
 if __name__=="__main__":
     thread_1=threading.Thread(target=func_send)
@@ -42,3 +44,4 @@ if __name__=="__main__":
     thread_2.start()
 
 # ser.close()
+    
