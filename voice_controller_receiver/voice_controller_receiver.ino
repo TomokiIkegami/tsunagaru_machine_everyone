@@ -185,7 +185,7 @@ void loop() {
     } else if (received_data_byte == "left_and_backward") {
       change_ST_pos(left_max, mov_speed_ST);      // ステアを左(Left)に切る
       change_TH_pos(backward_max, mov_speed_TH);  //後退(Backward)
-    } else if (received_data_byte == "rigth_and_backward") {
+    } else if (received_data_byte == "right_and_backward") {
       change_ST_pos(right_max, mov_speed_ST);     // ステアを右(Right)に切る
       change_TH_pos(backward_max, mov_speed_TH);  //後退(Backward)
     } else if (received_data_byte == "accelerate") {

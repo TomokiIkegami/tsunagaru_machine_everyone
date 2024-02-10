@@ -11,9 +11,9 @@ class HandDirectionDetector:
         elif finger_count == 2:
             return 'backward'
         elif finger_count == 3:
-            return 'right'
+            return 'right_and_backward'
         elif finger_count == 4:
-            return 'left'
+            return 'left_and_backward'
         elif finger_count == 5:
             return 'right_and_forward'
         elif finger_count == 0:
