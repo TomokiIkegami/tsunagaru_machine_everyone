@@ -1,3 +1,4 @@
+# This is a lang controlled program.
 #　ArduinoからのCdsセンサ出力受信してPythonで読む
 #　PythonからArduinoに命令を送る
 ''' 参考 
@@ -11,14 +12,15 @@ import threading    # マルチスレッド処理ライブラリ
 import sys   # システム関連のライブラリ
 
 import lang # 翻訳用プログラム
+import hand # 手の動き検出用プログラム
 
 ser = serial.Serial("COM6",115200) #Arduinoのシリアルポート番号と伝送速度を設定
 
 def func_send():
     while True:
         # キーボード入力によって、Arduinoに制御命令を送信
-        contorol_command=lang.translate_to_english(input("Enter a command: "), "ja")
-        print("Translated to: ",contorol_command)
+        contorol_command=hand.HandDirectionDetector.detect_hand_direction()
+        print("Detected: ",contorol_command)
         sent_command="{0};".format(contorol_command)
         byte_sent_command=sent_command.encode('utf-8')
         if(contorol_command=="q"):  # qを入力するとプログラムを終了

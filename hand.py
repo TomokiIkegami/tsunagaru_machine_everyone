@@ -7,17 +7,17 @@ class HandDirectionDetector:
 
     def determine_direction(self, finger_count):
         if finger_count == 1:
-            return 'Center'
+            return 'forward'
         elif finger_count == 2:
-            return 'Backward'
+            return 'backward'
         elif finger_count == 3:
-            return 'Right'
+            return 'right'
         elif finger_count == 4:
-            return 'Left'
+            return 'left'
         elif finger_count == 5:
-            return 'Forward Right'
+            return 'right_and_forward'
         elif finger_count == 0:
-            return 'Forward Left'
+            return 'left_and_forward'
         else:
             return 'stop'
 
@@ -39,25 +39,3 @@ class HandDirectionDetector:
             return direction
 
         return None
-
-hand_detector = HandDirectionDetector()
-
-video = cv2.VideoCapture(0)
-
-while True:
-    ret, frame = video.read()
-    frame = cv2.flip(frame, 1)
-
-    result_direction = hand_detector.detect_hand_direction(frame)
-
-    if result_direction is not None:
-        print(f'Direction: {result_direction}')
-
-    cv2.imshow("frame", frame)
-
-    k = cv2.waitKey(1)
-    if k == ord("k"):
-        break
-
-video.release()
-cv2.destroyAllWindows()

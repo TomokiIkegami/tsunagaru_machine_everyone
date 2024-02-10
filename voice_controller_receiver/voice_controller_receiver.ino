@@ -166,7 +166,7 @@ void loop() {
     } else if (received_data_byte == "backward") {
       change_ST_pos(center_pos, mov_speed_ST);    // ステアを中心(Center)に
       change_TH_pos(backward_max, mov_speed_TH);  //後退(Backward)
-    } else if (received_data_byte == "neutral") {
+    } else if (received_data_byte == "stop") {
       forward_max = neutral_pos + forward_DR;     //標準の速度に設定
       change_ST_pos(center_pos, mov_speed_ST);    // ステアを中心(Center)に
       change_TH_pos(neutral_pos, mov_speed_brk);  //中立(Neutral)
