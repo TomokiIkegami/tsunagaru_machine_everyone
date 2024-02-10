@@ -3,19 +3,25 @@
 ''' 参考 
 [1] https://next-k.site/blog/archives/2021/12/09/645
 [2] https://codechacha.com/ja/python-convert-string-to-bytes/
+[3] https://qiita.com/umi_mori/items/757834e0ef75f38cea19
 '''
-import serial
-import time
-import threading
+import serial   # シリアル通信ライブラリ
+import time    # 時間関連のライブラリ
+import threading    # マルチスレッド処理ライブラリ
+import sys   # システム関連のライブラリ
 
-ser = serial.Serial("COM3",115200) #Arduinoのシリアルポート番号と伝送速度を設定
+ser = serial.Serial("COM5",115200) #Arduinoのシリアルポート番号と伝送速度を設定
 
 def func_send():
     while True:
+        # キーボード入力によって、Arduinoに制御命令を送信
         contorol_command=input("Enter the control command: ")
         print("send1")
         sent_command="{0};".format(contorol_command)
         byte_sent_command=sent_command.encode('utf-8')
+        if(contorol_command=="q"):  # qを入力するとプログラムを終了
+            ser.close()
+            sys.exit(0)
         ser.write(byte_sent_command) #制御命令を送信
         time.sleep(1)   # 1秒間隔で制御命令を送信
         # set.write(send_data.encode('utf-8'))

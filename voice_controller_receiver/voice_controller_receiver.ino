@@ -3,7 +3,14 @@
 //[1]:https://tomson784.github.io/memo/python/arduino/2021/05/25/pyserial-arduino.html
 //[2]:https://tanudon.work/499/
 //[3]:https://spiceman.jp/arduino-cds-program/
-//[4]:https://tanudon.work/499/
+
+
+/*ライブラリ*/
+#include "BluetoothSerial.h"  //ESP32のBluetooth通信に使用
+#define PI 3.141592653589793 //円周率
+
+/*Bluetooth通信に必要*/
+BluetoothSerial ESP_BT;  //ESP_BTという名前でオブジェクトを定義
 
 /*ハードウェアの接続ピンの設定*/
 #define SERVO_PWM_PIN 4    //サーボモータのPWMピン（信号入力ピン）をESP32の4番ピンに接続 ★回路と対応した番号にする
@@ -120,6 +127,7 @@ void change_TH_pos(int goal_pos, unsigned long mov_speed) {
 
 void setup() {
     Serial.begin(115200); //伝送速度設定
+    ESP_BT.begin("ESP32_RC_Receiver");  //接続画面で表示される名前を設定 ★好きな名前にしてよい
     myservo.attach(SERVO_PWM_PIN, pulsew_min, pulsew_max);  //サーボモータのPWM端子とArduinoの4番ピンを接続 ★回路と対応した番号にする
     myesc.attach(ESC_PWM_PIN, pulsew_min, pulsew_max);      //ESCのPWM端子とArduinoの16番ピンを接続 ★回路と対応した番号にする
     Serial.println("Initializing ST and TH position....");
@@ -136,9 +144,9 @@ void loop() {
     /* 処理1：PCからの（制御）命令読み取りと送信 */
     if(currentTime-prevReadTime_ControlSignal>readPeriod_ControlSignal){
         prevReadTime_ControlSignal=currentTime; // 前時刻を現在の時刻に更新
-        if(Serial.available()>0){
-          received_data_byte=Serial.readStringUntil(';'); // read data from PC
-          Serial.println("received_data="+received_data_byte);
+        if(ESP_BT.available()>0){
+          received_data_byte=ESP_BT.readStringUntil(';'); // read data from PC
+          ESP_BT.println("received_data="+received_data_byte);
         }
     }
     
@@ -147,7 +155,7 @@ void loop() {
         prevReadTime_Sensor1=currentTime; // 前時刻を現在の時刻に更新
         val=analogRead(25); //センサの値などを読む
         voltage=float(val)*(3.3)/(4096); // AD変換
-        Serial.println((String)"V="+voltage+" [V]"); //文字をシリアルモニタに表示
+        ESP_BT.println((String)"V="+voltage+" [V]"); //文字をシリアルモニタに表示
     }
 
     curr = millis();  //現在時刻を取得
